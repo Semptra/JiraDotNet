@@ -8,7 +8,7 @@ namespace JiraDotNet.Tests.REST.Client
         [Fact]
         public void BlankTest()
         {
-            Assert.Equal(5, 5);
+            Assert.Equal(1, 1);
         }
     }
 }
