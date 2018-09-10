@@ -15,9 +15,10 @@
     {
         public JiraClient(string jiraBaseUrl, string username, string apiToken)
         {
-            _jiraUrl = jiraBaseUrl;
-
-            this._httpClient = new HttpClient();
+            this._httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(jiraBaseUrl)
+            };
 
             this._httpClient.DefaultRequestHeaders
                 .Accept

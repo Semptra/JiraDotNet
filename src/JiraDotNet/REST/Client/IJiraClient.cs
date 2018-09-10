@@ -10,6 +10,8 @@
     {
         Task<HttpResponseMessage> ValidateConfigurationAsync();
 
-        Task<Issue> GetIssueAsync(string issueIdOrKey, IEnumerable<string> fields, IEnumerable<string> properties);
+        Task<Project> GetProjectAsync(string projectIdOrKey);
+
+        Task<Issue> GetIssueAsync(string issueIdOrKey, IEnumerable<string> fields = null, IEnumerable<string> properties = null);
     }
 }

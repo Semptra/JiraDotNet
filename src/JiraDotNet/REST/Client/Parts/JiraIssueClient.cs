@@ -15,7 +15,7 @@
             IEnumerable<string> fields = null,
             IEnumerable<string> properties = null)
         {
-            string baseUrl = string.Format(CultureInfo.InvariantCulture, this._jiraUrl + JiraUrls.Issue.Get, issueIdOrKey);
+            string baseUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Issue.Get, issueIdOrKey);
 
             var queryParams = new Dictionary<string, string>();
 
