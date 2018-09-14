@@ -10,11 +10,35 @@
 
     public partial class JiraClient
     {
+        public async Task<ICollection<Project>> GetProjectsAsync()
+        {
+            return await this.GetEntitiesAsync<Project>(JiraUrls.Project.GetProjects);
+        }
+
         public async Task<Project> GetProjectAsync(string projectIdOrKey)
         {
-            string projectUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.Get, projectIdOrKey);
+            string projectUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProject, projectIdOrKey);
 
             return await this.GetEntityAsync<Project>(projectUrl);
+        }
+
+        public async Task<ICollection<ProjectType>> GetProjectTypesAsync()
+        {
+            return await this.GetEntitiesAsync<ProjectType>(JiraUrls.Project.GetProjectTypes);
+        }
+
+        public async Task<ProjectType> GetProjectTypeAsync(string projectTypeKey)
+        {
+            string projectTypeUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectType, projectTypeKey);
+
+            return await this.GetEntityAsync<ProjectType>(projectTypeUrl);
+        }
+
+        public async Task<ProjectType> GetAccessibleProjectType(string projectTypeKey)
+        {
+            string projectTypeUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetAccessibleProjectType, projectTypeKey);
+
+            return await this.GetEntityAsync<ProjectType>(projectTypeUrl);
         }
     }
 }

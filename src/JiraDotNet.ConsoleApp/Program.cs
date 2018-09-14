@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -13,10 +14,19 @@ namespace Semptra.JiraDotNet.ConsoleApp
         {
             // Insert Jira URL, username and API Token to test JiraClient
             // Also insert IDs or Keys for entities and uncomment needed ones
-            using (IJiraClient client = new JiraClient("", "", ""))
+            using (IJiraClient client = new JiraClient(
+                jiraBaseUrl: "",
+                username: "",
+                apiToken: ""))
             {
-                //GetAndLogEntity<Issue>("Issue", client.GetIssueAsync("").Result);
-                //GetAndLogEntity<Project>("Project", client.GetProjectAsync("").Result);
+                // GetAndLogEntity<ICollection<Project>>("Projects", client.GetProjectsAsync().Result);
+                // GetAndLogEntity<Project>("Project", client.GetProjectAsync("").Result);
+
+                // GetAndLogEntity<ICollection<ProjectType>>("Project Types", client.GetProjectTypesAsync().Result);
+                // GetAndLogEntity<ProjectType>("Project Type", client.GetProjectTypeAsync("").Result);
+                // GetAndLogEntity<ProjectType>("Accessible Project Type", client.GetAccessibleProjectType("").Result);
+
+                // GetAndLogEntity<Issue>("Issue", client.GetIssueAsync("").Result);
             }
         }
 
@@ -26,7 +36,7 @@ namespace Semptra.JiraDotNet.ConsoleApp
             string labelFormat = new string('-', 10) + " {0} " + new string('-', 10);
 
             Console.WriteLine(string.Format(labelFormat, label));
-                
+
             string jsonEntity = JsonConvert.SerializeObject(entity, Formatting.Indented);
 
             Console.WriteLine(jsonEntity);

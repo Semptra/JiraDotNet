@@ -4,8 +4,12 @@
     {
         public static class Project
         {
-            public const string Get = "/rest/api/3/project/{0}";
-            public const string GetAll = "/rest/api/3/project/";
+            public const string GetProjects = "/rest/api/3/project";
+            public const string GetProject = "/rest/api/3/project/{0}";
+
+            public const string GetProjectTypes = "/rest/api/3/project/type";
+            public const string GetProjectType = "/rest/api/3/project/type/{0}";
+            public const string GetAccessibleProjectType = "/rest/api/3/project/type/{0}/accessible";
         }
     }
 }

@@ -26,6 +26,8 @@ namespace Semptra.JiraDotNet.REST.Models
 
         public string Name { get; set; }
 
+        public IDictionary<string, string> Roles { get; set; }
+
         public string ProjectTypeKey { get; set; }
     }
 }

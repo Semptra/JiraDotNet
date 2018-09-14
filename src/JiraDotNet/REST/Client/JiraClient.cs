@@ -50,7 +50,7 @@
 
             while (current < totalResults)
             {
-                JObject jsonEntity = await this.GetJsonEntityAsync(url);
+                JObject jsonEntity = await this.GetJsonObjectAsync(url);
 
                 current += jsonEntity["maxResults"].Value<int>();
 
@@ -62,24 +62,43 @@
 
         private async Task<T> GetEntityAsync<T>(string url)
         {
-            JObject jsonEntity = await this.GetJsonEntityAsync(url);
+            JObject jsonObject = await this.GetJsonObjectAsync(url);
 
-            return jsonEntity.ToObject<T>();
+            return jsonObject.ToObject<T>();
         }
 
-        private async Task<JObject> GetJsonEntityAsync(string url)
+        private async Task<ICollection<T>> GetEntitiesAsync<T>(string url)
         {
-            string content = await this.GetAsStringAsync(url);
+            JArray jsonArray = await this.GetJsonArrayAsync(url);
 
-            if (!JsonHelper.IsValidJson(content))
+            return jsonArray.ToObject<ICollection<T>>();
+        }
+
+        private async Task<JObject> GetJsonObjectAsync(string url)
+        {
+            string content = await this.GetContentAsStringAsync(url);
+
+            if (!JsonHelper.IsValidJsonObject(content))
             {
-                throw new JsonParseException("Content is not a valid JSON");
+                throw new JsonParseException("Content is not a valid JSON Object");
             }
 
             return JObject.Parse(content);
         }
 
-        private async Task<string> GetAsStringAsync(string url)
+        private async Task<JArray> GetJsonArrayAsync(string url)
+        {
+            string content = await this.GetContentAsStringAsync(url);
+
+            if (!JsonHelper.IsValidJsonArray(content))
+            {
+                throw new JsonParseException("Content is not a valid JSON Array");
+            }
+
+            return JArray.Parse(content);
+        }
+
+        private async Task<string> GetContentAsStringAsync(string url)
         {
             HttpResponseMessage responce = await _httpClient.GetAsync(url).ConfigureAwait(false);
 
@@ -93,7 +112,7 @@
 
         private async Task<int> GetTotalNumberOfEntitiesAsync(string url)
         {
-            JObject jsonResponce = await this.GetJsonEntityAsync(url);
+            JObject jsonResponce = await this.GetJsonObjectAsync(url);
 
             if (!jsonResponce.TryGetValue("total", out JToken totalValueToken))
             {
