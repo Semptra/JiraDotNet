@@ -14,6 +14,9 @@
             public const string GetProjectAvatars = "/rest/api/3/project/{0}/avatars";
 
             public const string GetProjectComponents = "/rest/api/3/project/{0}/components";
+
+            public const string GetProjectPropertyKeys = "/rest/api/3/project/{0}/properties";
+            public const string GetProjectPropertyKey = "/rest/api/3/project/{0}/properties/{1}";
         }
     }
 }

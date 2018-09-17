@@ -132,8 +132,47 @@
         /// </param>
         /// </summary>
         Task<ICollection<ProjectComponent>> GetProjectComponents(string projectIdOrKey);
-
         Task<ICollection<ProjectComponent>> GetProjectComponentsPaginated(string projectIdOrKey);
+
+        /// <summary>
+        /// <para>
+        /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/?utm_medium=302#api-api-3-project-projectIdOrKey-properties-get
+        /// </para>
+        /// <para>
+        /// Returns all project property keys for the project.
+        /// </para>
+        /// <para>
+        /// Permissions required: Browse Projects project permission.
+        /// </para>
+        /// <para> 
+        /// App scope required: READ
+        /// </para>
+        /// <param name="projectIdOrKey">
+        /// The project ID or project key (case sensitive).
+        /// </param>
+        /// </summary>
+        Task<ProjectPropertyKeys> GetProjectPropertyKeys(string projectIdOrKey);
+        /// <summary>
+        /// <para>
+        /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/?utm_medium=302#api-api-3-project-projectIdOrKey-properties-propertyKey-get
+        /// </para>
+        /// <para>
+        /// Returns the value of the project property.
+        /// </para>
+        /// <para>
+        /// Permissions required: Browse Projects project permission.
+        /// </para>
+        /// <para> 
+        /// App scope required: READ
+        /// </para>
+        /// <param name="projectIdOrKey">
+        /// The project ID or project key (case sensitive).
+        /// </param>
+        /// <param name="propertyKey">
+        /// The project property key. Use <see cref="IJiraClient.GetProjectPropertyKeys(string)" /> to get a list of all project property keys.
+        /// </param>
+        /// </summary>
+        Task<PropertyKey> GetProjectPropertyKey(string projectIdOrKey, string propertyKey);
 
         /// <summary>
         /// <para>

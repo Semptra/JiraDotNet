@@ -59,5 +59,19 @@
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ProjectPropertyKeys> GetProjectPropertyKeys(string projectIdOrKey)
+        {
+            string projectPropertyKeysUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectPropertyKeys, projectIdOrKey);
+
+            return await this.GetEntityAsync<ProjectPropertyKeys>(projectPropertyKeysUrl);
+        }
+
+        public async Task<PropertyKey> GetProjectPropertyKey(string projectIdOrKey, string propertyKey)
+        {
+            string projectPropertyKeyUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectPropertyKey, projectIdOrKey, propertyKey);
+
+            return await this.GetEntityAsync<PropertyKey>(projectPropertyKeyUrl);
+        }
     }
 }
