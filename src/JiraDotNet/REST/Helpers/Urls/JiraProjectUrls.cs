@@ -10,6 +10,10 @@
             public const string GetProjectTypes = "/rest/api/3/project/type";
             public const string GetProjectType = "/rest/api/3/project/type/{0}";
             public const string GetAccessibleProjectType = "/rest/api/3/project/type/{0}/accessible";
+
+            public const string GetProjectAvatars = "/rest/api/3/project/{0}/avatars";
+
+            public const string GetProjectComponents = "/rest/api/3/project/{0}/components";
         }
     }
 }

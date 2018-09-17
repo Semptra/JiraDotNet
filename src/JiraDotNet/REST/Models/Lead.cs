@@ -12,6 +12,8 @@
 
         public string Name { get; set; }
 
+        public AvatarUrls AvatarUrls { get; set; }
+
         public string DisplayName { get; set; }
 
         public bool Active { get; set; }

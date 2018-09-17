@@ -40,5 +40,24 @@
 
             return await this.GetEntityAsync<ProjectType>(projectTypeUrl);
         }
+
+        public async Task<ProjectAvatars> GetProjectAvatars(string projectIdOrKey)
+        {
+            string projectAvatarsUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectAvatars, projectIdOrKey);
+
+            return await this.GetEntityAsync<ProjectAvatars>(projectAvatarsUrl);
+        }
+
+        public async Task<ICollection<ProjectComponent>> GetProjectComponents(string projectIdOrKey)
+        {
+            string projectComponentsUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectComponents, projectIdOrKey);
+
+            return await this.GetEntitiesAsync<ProjectComponent>(projectComponentsUrl);
+        }
+
+        public async Task<ICollection<ProjectComponent>> GetProjectComponentsPaginated(string projectIdOrKey)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

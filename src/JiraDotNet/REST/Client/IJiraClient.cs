@@ -100,6 +100,43 @@
 
         /// <summary>
         /// <para>
+        /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/?utm_medium=302#api-api-3-project-projectIdOrKey-avatars-get
+        /// </para>
+        /// <para>
+        /// Returns all project avatars visible for the currently logged in user. The avatars are grouped into system avatars and custom avatars.
+        /// </para>
+        /// <para> 
+        /// App scope required: READ
+        /// </para>
+        /// <param name="projectIdOrKey">
+        /// The project ID or project key (case sensitive). Project keys must start with an uppercase letter followed by one or more uppercase alphanumeric characters.
+        /// </param>
+        /// </summary>
+        Task<ProjectAvatars> GetProjectAvatars(string projectIdOrKey);
+
+        /// <summary>
+        /// <para>
+        /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/?utm_medium=302#api-api-3-project-projectIdOrKey-components-get
+        /// </para>
+        /// <para>
+        /// Returns all components existing in a single project. See the <see cref="IJiraClient.GetProjectComponentsPaginated(string)" /> resource if you want to get a full list of components with pagination.
+        /// </para>
+        /// <para>
+        /// Permissions required: Browse Projects project permission.
+        /// </para>
+        /// <para> 
+        /// App scope required: READ
+        /// </para>
+        /// <param name="projectIdOrKey">
+        /// The project ID or project key (case sensitive).
+        /// </param>
+        /// </summary>
+        Task<ICollection<ProjectComponent>> GetProjectComponents(string projectIdOrKey);
+
+        Task<ICollection<ProjectComponent>> GetProjectComponentsPaginated(string projectIdOrKey);
+
+        /// <summary>
+        /// <para>
         /// https://developer.atlassian.com/cloud/jira/platform/rest/v3/?utm_medium=302#api-api-3-issue-issueIdOrKey-get
         /// </para>
         /// <para>
