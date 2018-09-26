@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Semptra.JiraDotNet.REST.Client;
@@ -12,35 +13,41 @@ namespace Semptra.JiraDotNet.ConsoleApp
     {
         static void Main(string[] args)
         {
-            // Insert Jira URL, username and API Token to test JiraClient
-            // Also insert IDs or Keys for entities and uncomment needed ones
-            using (IJiraClient client = new JiraClient(
-                jiraBaseUrl: "",
-                username: "",
-                apiToken: ""))
-            {
-                // GetAndLogEntity<ICollection<Project>>("Projects", client.GetProjectsAsync().Result);
-                // GetAndLogEntity<Project>("Project", client.GetProjectAsync("").Result);
-
-                // GetAndLogEntity<ICollection<ProjectType>>("Project Types", client.GetProjectTypesAsync().Result);
-                // GetAndLogEntity<ProjectType>("Project Type", client.GetProjectTypeAsync("").Result);
-                // GetAndLogEntity<ProjectType>("Accessible Project Type", client.GetAccessibleProjectType("").Result);
-
-                // GetAndLogEntity<Issue>("Issue", client.GetIssueAsync("").Result);
-            }
+            MainAsync().GetAwaiter().GetResult();
         }
 
-        static void GetAndLogEntity<T>(string label, T entity)
+        static async Task MainAsync()
         {
-            string basePath = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
-            string labelFormat = new string('-', 10) + " {0} " + new string('-', 10);
+            // Insert Jira URL, username and API Token to test JiraClient
+            // Also insert IDs or Keys for entities and uncomment needed ones
+            using (IJiraClient jiraClient = new JiraClient(
+                jiraBaseUrl: "https://medavanteinc.atlassian.net",
+                username: "osachek@medavante.com",
+                apiToken: "F1qeveAHxLEV6Mij2hQP3ECD"))
+            {
+                ICollection<Status> statuses = await jiraClient.GetStatusesAsync();
 
-            Console.WriteLine(string.Format(labelFormat, label));
+                Console.WriteLine("Existing issues statuses:");
+                foreach (var status in statuses.OrderBy(x => x.Name))
+                {
+                    Console.WriteLine($"{status.Id.ToString().PadRight(6)} - {status.Name}");
+                }
 
-            string jsonEntity = JsonConvert.SerializeObject(entity, Formatting.Indented);
+                Console.WriteLine();
+                Console.Write("Select issue status (by ID or name): ");
+                string statusIdOrName = Console.ReadLine();
 
-            Console.WriteLine(jsonEntity);
-            File.WriteAllText(Path.Combine(basePath, label + ".json"), jsonEntity);
+                ICollection<Issue> issues = await jiraClient.SearchAsync($"status={statusIdOrName}");
+
+                Console.Clear();
+                Console.WriteLine($"Found {issues.Count} issues:");
+                foreach (var issue in issues)
+                {
+                    Console.WriteLine($"{issue.Id.ToString().PadRight(6)} - {issue.Key}");
+                }
+
+                Console.ReadLine();
+            }
         }
     }
 }

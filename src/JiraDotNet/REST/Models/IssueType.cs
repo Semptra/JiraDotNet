@@ -1,7 +1,7 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using System;
+﻿using System;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class IssueType
     {
         public Uri Self { get; set; }

@@ -1,7 +1,7 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class Avatar
     {
         public int Id { get; set; }

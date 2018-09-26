@@ -1,11 +1,11 @@
-﻿namespace Semptra.JiraDotNet.REST.Helpers
-{
-    using System;
-    using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 
-    public static class JsonHelper
+namespace Semptra.JiraDotNet.REST.Helpers
+{
+    internal static class JsonHelper
     {
-        public static bool IsValidJsonObject(string strInput)
+        internal static bool IsValidJsonObject(string strInput)
         {
             strInput = strInput.Trim();
 
@@ -28,7 +28,7 @@
             }
         }
 
-        public static bool IsValidJsonArray(string strInput)
+        internal static bool IsValidJsonArray(string strInput)
         {
             strInput = strInput.Trim();
 

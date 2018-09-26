@@ -1,7 +1,7 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class ProjectAvatars
     {
         public ICollection<Avatar> System { get; set; }

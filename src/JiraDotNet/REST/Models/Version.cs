@@ -1,8 +1,7 @@
-﻿
+﻿using System;
+
 namespace Semptra.JiraDotNet.REST.Models
 {
-    using System;
-
     public class Version
     {
         public Uri Self { get; set; }
@@ -15,13 +14,13 @@ namespace Semptra.JiraDotNet.REST.Models
 
         public bool Released { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
-        public DateTime UserStartDate { get; set; }
+        public DateTime? UserStartDate { get; set; }
 
-        public DateTime UserReleaseDate { get; set; }
+        public DateTime? UserReleaseDate { get; set; }
 
         public int ProjectId { get; set; }
     }

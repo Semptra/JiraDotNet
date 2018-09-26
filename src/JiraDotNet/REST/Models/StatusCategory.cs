@@ -2,14 +2,16 @@
 
 namespace Semptra.JiraDotNet.REST.Models
 {
-    public class Component
+    public class StatusCategory
     {
         public Uri Self { get; set; }
 
         public int Id { get; set; }
 
+        public string Key { get; set; }
+
         public string Name { get; set; }
 
-        public bool? IsAssigneeTypeValid { get; set; }
+        public string ColorName { get; set; }
     }
 }

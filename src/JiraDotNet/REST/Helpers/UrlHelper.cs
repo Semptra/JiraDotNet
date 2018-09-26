@@ -1,19 +1,23 @@
-﻿namespace Semptra.JiraDotNet.REST.Helpers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Web;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Web;
 
-    public static class UrlHelper
+namespace Semptra.JiraDotNet.REST.Helpers
+{
+    internal static class UrlHelper
     {
-        public static string ToUrl(string baseUrl, Dictionary<string, string> queryParams)
+        internal static string ToUrl(string baseUrl, Dictionary<string, string> queryParams)
         {
             var builder = new StringBuilder();
 
             builder.Append(baseUrl);
 
-            if (!baseUrl.EndsWith("?", System.StringComparison.InvariantCulture) &&
+            if (baseUrl.Contains("?"))
+            {
+                builder.Append("&");
+            }
+            else if (!baseUrl.EndsWith("?", System.StringComparison.InvariantCulture) &&
                 queryParams != null &&
                 queryParams.Count != 0)
             {
@@ -24,7 +28,7 @@
             {
                 builder.Append(queryParam.Key);
                 builder.Append("=");
-                builder.Append(queryParam.Value);
+                builder.Append(HttpUtility.UrlEncode(queryParam.Value));
                 builder.Append("&");
             }
 
@@ -33,7 +37,7 @@
                 builder.Remove(builder.Length - 1, 1);
             }
 
-            return HttpUtility.UrlEncode(builder.ToString());
+            return builder.ToString();
         }
     }
 }

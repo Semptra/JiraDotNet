@@ -2,7 +2,7 @@
 
 namespace Semptra.JiraDotNet.REST.Models
 {
-    public class Component
+    public class Priority
     {
         public Uri Self { get; set; }
 
@@ -10,6 +10,6 @@ namespace Semptra.JiraDotNet.REST.Models
 
         public string Name { get; set; }
 
-        public bool? IsAssigneeTypeValid { get; set; }
+        public Uri IconUrl { get; set; }
     }
 }

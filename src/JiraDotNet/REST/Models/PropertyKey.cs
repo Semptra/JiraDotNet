@@ -1,8 +1,8 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using System;
-    using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class PropertyKey
     {
         public string Self { get; set; }

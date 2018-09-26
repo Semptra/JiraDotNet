@@ -1,7 +1,7 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using System;
+﻿using System;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class Lead
     {
         public Uri Self { get; set; }

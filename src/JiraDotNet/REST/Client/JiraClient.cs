@@ -1,63 +1,112 @@
-﻿namespace Semptra.JiraDotNet.REST.Client
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-    using Semptra.JiraDotNet.REST.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Semptra.JiraDotNet.REST.Helpers;
+using Semptra.JiraDotNet.REST.Helpers.Urls;
 
+namespace Semptra.JiraDotNet.REST.Client
+{
     public partial class JiraClient : IJiraClient
     {
         public JiraClient(string jiraBaseUrl, string username, string apiToken)
         {
-            this._httpClient = new HttpClient
+            this.httpClient = new HttpClient
             {
                 BaseAddress = new Uri(jiraBaseUrl)
             };
 
-            this._httpClient.DefaultRequestHeaders
+            this.httpClient.DefaultRequestHeaders
                 .Accept
-                .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                .Add(new MediaTypeWithQualityHeaderValue(MediaTypes.ApplicationJson));
 
             byte[] authCredentials = Encoding.ASCII.GetBytes($"{username}:{apiToken}");
 
-            this._httpClient.DefaultRequestHeaders.Authorization =
+            this.httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(
                     scheme: "Basic",
                     parameter: Convert.ToBase64String(authCredentials));
         }
 
-        private string _jiraUrl { get; }
-
-        private HttpClient _httpClient { get; }
+        private HttpClient httpClient { get; }
 
         public async Task<HttpResponseMessage> ValidateConfigurationAsync()
         {
-            return await this._httpClient.GetAsync("/rest/api/3/project");
+            return await this.httpClient.GetAsync(JiraUrls.Project.GetProjects);
         }
 
-        private async Task<IList<T>> GetEntitiesWithPaginationAsync<T>(string url, string valuesField)
+        private async Task<IList<T>> GetEntitiesWithPaginationAsync<T>(string url,
+            int startAt, int maxResults, int? totalResults, string valuesField)
         {
-            List<T> entities = new List<T>();
+            var entities = new List<T>();
 
-            int current = 0;
-            int totalResults = await this.GetTotalNumberOfEntitiesAsync(url);
-
-            while (current < totalResults)
+            var queryParams = new Dictionary<string, string>
             {
-                JObject jsonEntity = await this.GetJsonObjectAsync(url);
+                { JiraConstFields.Pagination.StartAt, startAt.ToString() },
+                { JiraConstFields.Pagination.MaxResults, maxResults.ToString() }
+            };
 
-                current += jsonEntity["maxResults"].Value<int>();
+            int jiraTotalResults = await this.GetTotalNumberOfEntitiesAsync(url);
 
-                entities.AddRange(JsonConvert.DeserializeObject<ICollection<T>>(jsonEntity[valuesField].Value<string>()));
+            totalResults = Math.Min(totalResults ?? jiraTotalResults, jiraTotalResults);
+
+            if (totalResults < maxResults)
+            {
+                maxResults = totalResults.Value;
+            }
+
+            List<string> serializationErrors = new List<string>();
+
+            while (startAt < totalResults)
+            {
+                queryParams[JiraConstFields.Pagination.StartAt] = startAt.ToString();
+                queryParams[JiraConstFields.Pagination.MaxResults] = maxResults.ToString();
+
+                JObject jsonEntity = await this.GetJsonObjectAsync(UrlHelper.ToUrl(url, queryParams));
+
+                startAt += jsonEntity[JiraConstFields.Pagination.MaxResults].Value<int>();
+
+                entities.AddRange(JsonConvert.DeserializeObject<ICollection<T>>(
+                    jsonEntity.GetValue(valuesField).ToString(),
+                    new JsonSerializerSettings
+                    {
+                        Error = (sender, args) =>
+                        {
+                            serializationErrors.Add(args.ErrorContext.Error.Message);
+                            args.ErrorContext.Handled = true;
+                        }
+                    }));
+            }
+
+            if (serializationErrors.Count != 0)
+            {
+                throw new JsonSerializationException(string.Join(Environment.NewLine, serializationErrors));
             }
 
             return entities;
+        }
+
+        private async Task<int> GetTotalNumberOfEntitiesAsync(string url)
+        {
+            JObject jsonResponce = await this.GetJsonObjectAsync(url);
+
+            if (!jsonResponce.TryGetValue(JiraConstFields.Pagination.Total, out JToken totalValueToken))
+            {
+                return 0;
+            }
+
+            if (!int.TryParse(totalValueToken.Value<string>(), out int total))
+            {
+                return 0;
+            }
+
+            return total;
         }
 
         private async Task<T> GetEntityAsync<T>(string url)
@@ -77,6 +126,8 @@
         private async Task<JObject> GetJsonObjectAsync(string url)
         {
             string content = await this.GetContentAsStringAsync(url);
+
+            content = content.Replace("\\\\ \"", "\\\\\"");
 
             if (!JsonHelper.IsValidJsonObject(content))
             {
@@ -100,7 +151,7 @@
 
         private async Task<string> GetContentAsStringAsync(string url)
         {
-            HttpResponseMessage responce = await _httpClient.GetAsync(url).ConfigureAwait(false);
+            HttpResponseMessage responce = await this.httpClient.GetAsync(url).ConfigureAwait(false);
 
             if (responce.StatusCode != HttpStatusCode.OK)
             {
@@ -110,26 +161,9 @@
             return await responce.Content.ReadAsStringAsync();
         }
 
-        private async Task<int> GetTotalNumberOfEntitiesAsync(string url)
+        void IDisposable.Dispose()
         {
-            JObject jsonResponce = await this.GetJsonObjectAsync(url);
-
-            if (!jsonResponce.TryGetValue("total", out JToken totalValueToken))
-            {
-                return 0;
-            }
-
-            if (!int.TryParse(totalValueToken.Value<string>(), out int total))
-            {
-                return 0;
-            }
-
-            return total;
-        }
-
-        public void Dispose()
-        {
-            this._httpClient.Dispose();
+            this.httpClient.Dispose();
             GC.SuppressFinalize(this);
         }
     }

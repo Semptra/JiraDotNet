@@ -1,13 +1,12 @@
-﻿namespace Semptra.JiraDotNet.REST.Client
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Threading.Tasks;
-    using Semptra.JiraDotNet.REST.Helpers;
-    using Semptra.JiraDotNet.REST.Helpers.Urls;
-    using Semptra.JiraDotNet.REST.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
+using Semptra.JiraDotNet.REST.Helpers.Urls;
+using Semptra.JiraDotNet.REST.Models;
 
+namespace Semptra.JiraDotNet.REST.Client
+{
     public partial class JiraClient
     {
         public async Task<ICollection<Project>> GetProjectsAsync()
@@ -72,6 +71,20 @@
             string projectPropertyKeyUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectPropertyKey, projectIdOrKey, propertyKey);
 
             return await this.GetEntityAsync<PropertyKey>(projectPropertyKeyUrl);
+        }
+
+        public async Task<IDictionary<string, string>> GetProjectRoles(string projectIdOrKey)
+        {
+            string projectRolesUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectRoles, projectIdOrKey);
+
+            return await this.GetEntityAsync<IDictionary<string, string>>(projectRolesUrl);
+        }
+
+        public async Task<ProjectRole> GetProjectRole(string projectIdOrKey, int roleId)
+        {
+            string projectRoleUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Project.GetProjectRole, projectIdOrKey, roleId);
+
+            return await this.GetEntityAsync<ProjectRole>(projectRoleUrl);
         }
     }
 }

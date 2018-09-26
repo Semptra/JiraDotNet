@@ -1,8 +1,8 @@
-﻿namespace Semptra.JiraDotNet.REST
-{
-    using System;
+﻿using System;
 
-    public class JsonParseException : Exception
+namespace Semptra.JiraDotNet.REST
+{
+    public sealed class JsonParseException : Exception
     {
         public JsonParseException() : base() { }
 

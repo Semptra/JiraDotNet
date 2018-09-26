@@ -1,9 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 namespace Semptra.JiraDotNet.REST.Models
 {
-    using System;
-    using System.Collections.Generic;
-
     public class Project
     {
         public Uri Self { get; set; }

@@ -1,8 +1,8 @@
-﻿namespace Semptra.JiraDotNet.REST.Models
-{
-    using System.Collections.Generic;
-    using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
+namespace Semptra.JiraDotNet.REST.Models
+{
     public class ProjectPropertyKeys
     {
         [JsonProperty("keys")]

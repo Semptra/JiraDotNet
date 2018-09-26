@@ -1,9 +1,9 @@
-﻿namespace Semptra.JiraDotNet.REST
-{
-    using System;
-    using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 
-    public class JiraRequestException : Exception
+namespace Semptra.JiraDotNet.REST
+{
+    public sealed class JiraRequestException : Exception
     {
         public JiraRequestException() : base() { }
 

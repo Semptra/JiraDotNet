@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Semptra.JiraDotNet.REST.Extensions;
 using Semptra.JiraDotNet.REST.Helpers;
@@ -11,19 +9,18 @@ namespace Semptra.JiraDotNet.REST.Client
 {
     public partial class JiraClient
     {
-        public async Task<Issue> GetIssueAsync(string issueIdOrKey,
-            IEnumerable<string> fields = null, IEnumerable<string> properties = null)
+        public async Task<ICollection<Issue>> SearchAsync(string jql, int startAt = 0, int maxResults = 50,
+            int? totalResults = null, IEnumerable<string> fields = null, IEnumerable<string> properties = null)
         {
-            string baseUrl = string.Format(CultureInfo.InvariantCulture, JiraUrls.Issue.Get, issueIdOrKey);
-
             var queryParams = new Dictionary<string, string>();
 
+            queryParams.AddQueryParam(JiraConstFields.QueryParams.Jql, jql);
             queryParams.AddQueryParams(JiraConstFields.QueryParams.Fields, fields);
             queryParams.AddQueryParams(JiraConstFields.QueryParams.Properties, properties);
 
-            string issueUrl = UrlHelper.ToUrl(baseUrl, queryParams);
+            string searchUrl = UrlHelper.ToUrl(JiraUrls.Search.Get, queryParams);
 
-            return await this.GetEntityAsync<Issue>(issueUrl);
+            return await this.GetEntitiesWithPaginationAsync<Issue>(searchUrl, startAt, maxResults, totalResults, "issues");
         }
     }
 }
