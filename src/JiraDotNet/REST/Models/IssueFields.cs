@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Semptra.JiraDotNet.REST.Models
 {
     public class IssueFields
     {
+        [JsonRequired]
         public IssueType IssueType { get; set; }
 
-        public string TimeSpent { get; set; }
-
+        [JsonRequired]
         public Project Project { get; set; }
+
+        [JsonRequired]
+        public string Summary { get; set; }
+
+        public string TimeSpent { get; set; }
 
         public ICollection<FixVersion> FixVersions { get; set; }
 
@@ -30,8 +36,6 @@ namespace Semptra.JiraDotNet.REST.Models
         public ICollection<Component> Components { get; set; }
 
         public IssueDescription Description { get; set; }
-
-        public string Summary { get; set; }
 
         public Account Creator { get; set; }
 

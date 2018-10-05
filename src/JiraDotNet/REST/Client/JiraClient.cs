@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Semptra.JiraDotNet.REST.Helpers;
+using Semptra.JiraDotNet.REST.Helpers.Json;
 using Semptra.JiraDotNet.REST.Helpers.Urls;
 
 namespace Semptra.JiraDotNet.REST.Client
@@ -159,6 +160,27 @@ namespace Semptra.JiraDotNet.REST.Client
             }
 
             return await responce.Content.ReadAsStringAsync();
+        }
+
+        private async Task<string> PostStringAsync(string url, string stringContent)
+        {
+            var content = new StringContent(stringContent, Encoding.UTF8, Helpers.MediaTypes.ApplicationJson);
+
+            HttpResponseMessage responce = await this.httpClient.PostAsync(url, content);
+
+            if (!responce.IsSuccessStatusCode)
+            {
+                throw new JiraRequestException(responce);
+            }
+
+            if (responce.Content != null)
+            {
+                return await responce.Content.ReadAsStringAsync();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         void IDisposable.Dispose()

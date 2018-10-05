@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
 
-namespace Semptra.JiraDotNet.REST.Helpers
+namespace Semptra.JiraDotNet.REST.Helpers.Json
 {
     internal static class JsonHelper
     {

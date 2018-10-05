@@ -8,6 +8,8 @@ namespace Semptra.JiraDotNet.REST.Client
 {
     public interface IJiraClient : IDisposable
     {
+        #region Get
+
         /// <summary>
         /// Validates if credentials is valid
         /// </summary>
@@ -267,5 +269,26 @@ namespace Semptra.JiraDotNet.REST.Client
         /// <param name="properties">A comma-separated list of up to 5 issue properties to include in the results.</param>
         Task<ICollection<Issue>> SearchAsync(string jql, int startAt = 0, int maxResults = 50,
             int? totalResults = null, IEnumerable<string> fields = null, IEnumerable<string> properties = null);
+
+        #endregion
+
+        #region Post
+
+        /// <summary>
+        /// <para>
+        /// Creates an issue or a sub-task from a JSON representation.
+        /// </para>
+        /// <para>
+        /// App scope required: WRITE
+        /// </para>
+        /// <para>
+        /// OAuth scopes required: write:jira-work 
+        /// </para>
+        /// </summary>
+        /// <param name="issue">Issue data</param>
+        /// <returns></returns>
+        Task<Issue> CreateIssueAsync(Issue issue);
+
+        #endregion
     }
 }

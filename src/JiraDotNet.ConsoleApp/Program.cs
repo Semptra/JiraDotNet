@@ -25,28 +25,24 @@ namespace Semptra.JiraDotNet.ConsoleApp
                 username: "osachek@medavante.com",
                 apiToken: "F1qeveAHxLEV6Mij2hQP3ECD"))
             {
-                ICollection<Status> statuses = await jiraClient.GetStatusesAsync();
+                var issue = await jiraClient.CreateIssueAsync(
+                    new Issue
+                    {
+                        IssueFields = new IssueFields
+                        {
+                            Project = new Project
+                            {
+                                Id = 11000
+                            },
+                            IssueType = new IssueType
+                            {
+                                Id = 10500
+                            },
+                            Summary = "New Test ISSUE from JiraDotNet",
+                        }
+                    });
 
-                Console.WriteLine("Existing issues statuses:");
-                foreach (var status in statuses.OrderBy(x => x.Name))
-                {
-                    Console.WriteLine($"{status.Id.ToString().PadRight(6)} - {status.Name}");
-                }
-
-                Console.WriteLine();
-                Console.Write("Select issue status (by ID or name): ");
-                string statusIdOrName = Console.ReadLine();
-
-                ICollection<Issue> issues = await jiraClient.SearchAsync($"status={statusIdOrName}");
-
-                Console.Clear();
-                Console.WriteLine($"Found {issues.Count} issues:");
-                foreach (var issue in issues)
-                {
-                    Console.WriteLine($"{issue.Id.ToString().PadRight(6)} - {issue.Key}");
-                }
-
-                Console.ReadLine();
+                Console.WriteLine(issue);
             }
         }
     }

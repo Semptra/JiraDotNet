@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Semptra.JiraDotNet.REST.Extensions;
 using Semptra.JiraDotNet.REST.Helpers;
 using Semptra.JiraDotNet.REST.Helpers.Urls;
